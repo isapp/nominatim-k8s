@@ -57,7 +57,7 @@ spec:
     serviceName: nominatim
     servicePort: 80
   rules:
-  - host: map.twenty.co
+  - host: maps-fmrpexnhqv3dfkzsjeyiadxu.twenty.co
     http:
       paths:
       - path: /*

@@ -67,9 +67,6 @@ fi
 
 # Tail Apache logs and start nginx
 tail -f /var/log/apache2/* &
-mkdir -p /run/nginx/
-touch /run/nginx/nginx.pid
-cp /etc/nginx-conf/default.conf /etc/nginx/conf.d/default.conf
-nginx -g "daemon on;"
+
 # Run Apache in the foreground
 /usr/sbin/apache2ctl -D FOREGROUND

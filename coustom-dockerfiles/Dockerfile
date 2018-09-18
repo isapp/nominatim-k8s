@@ -27,7 +27,6 @@ RUN apt-get -y update \
     postgresql-server-dev-9.3 \
     php5 \
     php5-cli \
-    
     curl
 
 # Build Nominatim
@@ -58,8 +57,6 @@ RUN locale-gen en_US.UTF-8 \
     postgresql-9.3-postgis-2.1 \
     postgresql-server-dev-9.3 \
     apache2 \
-    apache2-utils \
-    nginx \
     php5 \
     php5-pgsql \
     php5-intl \
@@ -79,9 +76,6 @@ COPY local.php /srv/nominatim/build/settings/local.php
 
 # Configure Apache
 COPY nominatim.conf /etc/apache2/sites-enabled/000-default.conf
-COPY nginx/.htpasswd /etc/nginx/.htpasswd
-COPY nginx/nginx.conf /etc/nginx/nginx.conf
-COPY nginx/default.conf /etc/nginx/conf.d/default.conf
 
 # Allow remote connections to PostgreSQL
 RUN echo "host all  all    0.0.0.0/0  trust" >> /etc/postgresql/9.3/main/pg_hba.conf \
@@ -93,7 +87,6 @@ RUN apt-get -y update && \
     pip uninstall crcmod && \
     pip install -U crcmod
 
-RUN useradd -ms /bin/bash nginx
 # Set the entrypoint
 COPY docker-entrypoint.sh /
 RUN chmod +x /docker-entrypoint.sh
@@ -101,4 +94,3 @@ ENTRYPOINT ["/docker-entrypoint.sh"]
 
 EXPOSE 5432
 EXPOSE 8080
-EXPOSE 80 443
