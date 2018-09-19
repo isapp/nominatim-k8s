@@ -25,7 +25,7 @@ metadata:
   name: maps-volume1
   labels:
     failure-domain.beta.kubernetes.io/zone: us-east1-b
-    name: maps-volume
+    name: maps-volume1
 spec:
   capacity:
     storage: 2500Gi
@@ -94,6 +94,18 @@ spec:
         app: nominatim
         track: stable
     spec:
+      affinity:
+          podAntiAffinity:
+            preferredDuringSchedulingIgnoredDuringExecution:
+            - weight: 100
+              podAffinityTerm:
+                labelSelector:
+                  matchExpressions:
+                  - key: app
+                    operator: In
+                    values:
+                    - nominatim
+                topologyKey: kubernetes.io/hostname
       containers:
       - env:
         - name: NOMINATIM_MODE
@@ -118,6 +130,12 @@ spec:
         ports:
         - containerPort: 8080
           name: nominatim
+        readinessProbe:
+          httpGet:
+            path: /search
+            port: 8080
+          initialDelaySeconds: 60
+          timeoutSeconds: 10
         volumeMounts:
         - name: maps-volume
           mountPath: /var/lib/postgresql/9.3/main
